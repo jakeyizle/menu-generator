@@ -19,10 +19,11 @@ app.use('/api/healthCheck', (req, res) => {
 })
 // In production, serve the built files
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../dist')));
+  app.use(express.static(path.join(__dirname, '../../dist')));
   
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+    console.log(path.join(__dirname, '../../dist', 'index.html'))
+    res.sendFile(path.join(__dirname, '../../dist', 'index.html'));
   });
 }
 
