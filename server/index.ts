@@ -14,7 +14,9 @@ app.use(cors());
 
 // API Routes
 app.use('/api/recipes', recipeRoutes);
-
+app.use('/api/healthCheck', (req, res) => {
+  res.status(200).json({ message: 'Server is healthy' });
+})
 // In production, serve the built files
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../dist')));

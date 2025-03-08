@@ -22,7 +22,10 @@ export const scrapeRecipe = async (url: string): Promise<Recipe> => {
       throw new Error(errorData.error || `Server responded with status: ${response.status}`);
     }
     
-    const recipe = await response.json();
+    const recipe = (await response.json()) as Recipe;
+    console.log(recipe)
+    recipe.mealTypes = new Set(recipe.mealTypes);
+    console.log(recipe)
     return recipe;
   } catch (error) {
     console.error("Error scraping recipe:", error);
