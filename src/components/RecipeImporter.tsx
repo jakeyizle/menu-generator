@@ -28,6 +28,7 @@ export function RecipeImporter({ onImportSuccess, disabled = false }: RecipeImpo
 
         try {
             const recipe = await scrapeRecipe(recipeUrl)
+            console.log(recipe)
             onImportSuccess(recipe)
             setScrapeSuccess(true)
             // Optionally clear the URL after successful import
