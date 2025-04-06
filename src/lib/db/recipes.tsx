@@ -1,4 +1,4 @@
-import { Recipe } from "@/types/recipe";
+import { Recipe } from "@/types/types";
 import localForage from "localforage";
 import { v4 as uuidv4 } from 'uuid';
 
@@ -11,10 +11,8 @@ const db = localForage.createInstance({
 
 export const getRecipes = async (): Promise<Recipe[]> => {
     const recipes: Recipe[] = []
-    console.log(await db.keys())
     await db.iterate((recipe: Recipe) => { 
         recipes.push(recipe) })
-    console.log(recipes)
     return recipes;
 };
 
@@ -26,7 +24,11 @@ export const getRecipe = async (id: string): Promise<Recipe> => {
 
 export const createRecipe = async (recipe: Recipe): Promise<Recipe> => {
     recipe.id ||= uuidv4()
-    console.log(recipe)
+    
+    if (await doesRecipeExist(recipe.id)) {
+        throw new Error(`Recipe with id ${recipe.id} already exists`)
+    }
+
     await db.setItem(recipe.id, recipe)
     return recipe;
 };
@@ -39,3 +41,8 @@ export const updateRecipe = async (recipe: Recipe): Promise<Recipe> => {
 export const deleteRecipe = async (id: string): Promise<void> => {
     await db.removeItem(id)
 };
+
+export const doesRecipeExist = async (id: string): Promise<boolean> => {
+    const recipe = await db.getItem<Recipe>(id)
+    return !!recipe
+}

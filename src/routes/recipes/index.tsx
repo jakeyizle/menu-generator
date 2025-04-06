@@ -1,6 +1,5 @@
-import * as React from 'react'
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { RecipeList } from '@/components/RecipeList'
+import { RecipeList } from '@/components/recipes/RecipeList'
 import { Button } from '@/components/ui/button'
 import { PlusCircle } from 'lucide-react'
 import { useSuspenseQuery } from '@tanstack/react-query'

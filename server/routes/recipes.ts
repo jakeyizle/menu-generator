@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { scrapeRecipe } from '../utils/scraper.js';
-import { Recipe, MealType, Ingredient } from '../../src/types/recipe.js';
+import { Recipe, MealType, Ingredient } from '../../src/types/types.js';
 
 const router = express.Router();
 

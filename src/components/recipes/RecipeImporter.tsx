@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import type { Recipe } from "@/types/recipe"
+import type { Recipe } from "@/types/types"
 import { scrapeRecipe } from "@/lib/scrapeRecipe"
 
 interface RecipeImporterProps {
@@ -27,8 +27,7 @@ export function RecipeImporter({ onImportSuccess, disabled = false }: RecipeImpo
         setScrapeSuccess(false)
 
         try {
-            const recipe = await scrapeRecipe(recipeUrl)
-            console.log(recipe)
+            const recipe = await scrapeRecipe(recipeUrl)            
             onImportSuccess(recipe)
             setScrapeSuccess(true)
             // Optionally clear the URL after successful import

@@ -3,9 +3,9 @@ import { ArrowLeft, Edit, Trash2, Coffee, UtensilsCrossed, ChefHat } from "lucid
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { DeleteRecipeDialog } from "@/components/DeleteRecipeDialog"
+import { DeleteDialog } from "../DeleteDialog"
 import { useState } from "react"
-import { Recipe } from "@/types/recipe"
+import { Recipe } from "@/types/types"
 import { Link, useRouter } from "@tanstack/react-router"
 import { deleteRecipe } from "@/lib/db/recipes"
 
@@ -17,9 +17,9 @@ export default function RecipeView({ recipe }: RecipeViewProps) {
     const router = useRouter()
     const [showDeleteDialog, setShowDeleteDialog] = useState(false)
 
-    const handleDelete = () => {
-        deleteRecipe(recipe.id)
-        router.history.back()        
+    const handleDelete = async () => {
+        await deleteRecipe(recipe.id)
+        router.history.back()
     }
 
     const getMealTypeIcon = (type: string) => {
@@ -68,6 +68,12 @@ export default function RecipeView({ recipe }: RecipeViewProps) {
 
             <div className="mb-8">
                 <p className="text-lg text-muted-foreground">{recipe.description}</p>
+                {recipe.url && (
+                    <p className="text-md mt-2">
+                        Source: <a href={recipe.url} target="_blank" rel="noopener noreferrer" className="underline text-blue-600 hover:text-blue-800 visited:text-purple-600">{recipe.url}</a>
+                    </p>
+                )}
+                <p className="text-md mt-2">Servings: <span className="font-medium">{recipe.servings}</span></p>
             </div>
 
             <div className="mb-8">
@@ -89,8 +95,7 @@ export default function RecipeView({ recipe }: RecipeViewProps) {
                 </Card>
             </div>
 
-            <DeleteRecipeDialog isOpen={showDeleteDialog} onClose={() => { setShowDeleteDialog(false) }} onDelete={handleDelete} />
+            <DeleteDialog isOpen={showDeleteDialog} onClose={() => { setShowDeleteDialog(false) }} onDelete={handleDelete} />
         </div>
     )
 }
-

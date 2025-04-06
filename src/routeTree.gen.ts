@@ -14,9 +14,13 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as RecipesIndexImport } from './routes/recipes/index'
+import { Route as MenusIndexImport } from './routes/menus/index'
 import { Route as RecipesNewImport } from './routes/recipes/new'
 import { Route as RecipesRecipeIdImport } from './routes/recipes/$recipeId'
+import { Route as MenusNewImport } from './routes/menus/new'
+import { Route as MenusMenuIdImport } from './routes/menus/$menuId'
 import { Route as RecipesRecipeIdEditImport } from './routes/recipes_.$recipeId.edit'
+import { Route as MenusMenuIdEditImport } from './routes/menus_.$menuId.edit'
 
 // Create/Update Routes
 
@@ -38,6 +42,12 @@ const RecipesIndexRoute = RecipesIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const MenusIndexRoute = MenusIndexImport.update({
+  id: '/menus/',
+  path: '/menus/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const RecipesNewRoute = RecipesNewImport.update({
   id: '/recipes/new',
   path: '/recipes/new',
@@ -50,9 +60,27 @@ const RecipesRecipeIdRoute = RecipesRecipeIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const MenusNewRoute = MenusNewImport.update({
+  id: '/menus/new',
+  path: '/menus/new',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MenusMenuIdRoute = MenusMenuIdImport.update({
+  id: '/menus/$menuId',
+  path: '/menus/$menuId',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const RecipesRecipeIdEditRoute = RecipesRecipeIdEditImport.update({
   id: '/recipes_/$recipeId/edit',
   path: '/recipes/$recipeId/edit',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MenusMenuIdEditRoute = MenusMenuIdEditImport.update({
+  id: '/menus_/$menuId/edit',
+  path: '/menus/$menuId/edit',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -74,6 +102,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/menus/$menuId': {
+      id: '/menus/$menuId'
+      path: '/menus/$menuId'
+      fullPath: '/menus/$menuId'
+      preLoaderRoute: typeof MenusMenuIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/menus/new': {
+      id: '/menus/new'
+      path: '/menus/new'
+      fullPath: '/menus/new'
+      preLoaderRoute: typeof MenusNewImport
+      parentRoute: typeof rootRoute
+    }
     '/recipes/$recipeId': {
       id: '/recipes/$recipeId'
       path: '/recipes/$recipeId'
@@ -88,11 +130,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RecipesNewImport
       parentRoute: typeof rootRoute
     }
+    '/menus/': {
+      id: '/menus/'
+      path: '/menus'
+      fullPath: '/menus'
+      preLoaderRoute: typeof MenusIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/recipes/': {
       id: '/recipes/'
       path: '/recipes'
       fullPath: '/recipes'
       preLoaderRoute: typeof RecipesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/menus_/$menuId/edit': {
+      id: '/menus_/$menuId/edit'
+      path: '/menus/$menuId/edit'
+      fullPath: '/menus/$menuId/edit'
+      preLoaderRoute: typeof MenusMenuIdEditImport
       parentRoute: typeof rootRoute
     }
     '/recipes_/$recipeId/edit': {
@@ -110,18 +166,26 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/menus/$menuId': typeof MenusMenuIdRoute
+  '/menus/new': typeof MenusNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/new': typeof RecipesNewRoute
+  '/menus': typeof MenusIndexRoute
   '/recipes': typeof RecipesIndexRoute
+  '/menus/$menuId/edit': typeof MenusMenuIdEditRoute
   '/recipes/$recipeId/edit': typeof RecipesRecipeIdEditRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/menus/$menuId': typeof MenusMenuIdRoute
+  '/menus/new': typeof MenusNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/new': typeof RecipesNewRoute
+  '/menus': typeof MenusIndexRoute
   '/recipes': typeof RecipesIndexRoute
+  '/menus/$menuId/edit': typeof MenusMenuIdEditRoute
   '/recipes/$recipeId/edit': typeof RecipesRecipeIdEditRoute
 }
 
@@ -129,9 +193,13 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/menus/$menuId': typeof MenusMenuIdRoute
+  '/menus/new': typeof MenusNewRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/recipes/new': typeof RecipesNewRoute
+  '/menus/': typeof MenusIndexRoute
   '/recipes/': typeof RecipesIndexRoute
+  '/menus_/$menuId/edit': typeof MenusMenuIdEditRoute
   '/recipes_/$recipeId/edit': typeof RecipesRecipeIdEditRoute
 }
 
@@ -140,25 +208,37 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/menus/$menuId'
+    | '/menus/new'
     | '/recipes/$recipeId'
     | '/recipes/new'
+    | '/menus'
     | '/recipes'
+    | '/menus/$menuId/edit'
     | '/recipes/$recipeId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/menus/$menuId'
+    | '/menus/new'
     | '/recipes/$recipeId'
     | '/recipes/new'
+    | '/menus'
     | '/recipes'
+    | '/menus/$menuId/edit'
     | '/recipes/$recipeId/edit'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/menus/$menuId'
+    | '/menus/new'
     | '/recipes/$recipeId'
     | '/recipes/new'
+    | '/menus/'
     | '/recipes/'
+    | '/menus_/$menuId/edit'
     | '/recipes_/$recipeId/edit'
   fileRoutesById: FileRoutesById
 }
@@ -166,18 +246,26 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  MenusMenuIdRoute: typeof MenusMenuIdRoute
+  MenusNewRoute: typeof MenusNewRoute
   RecipesRecipeIdRoute: typeof RecipesRecipeIdRoute
   RecipesNewRoute: typeof RecipesNewRoute
+  MenusIndexRoute: typeof MenusIndexRoute
   RecipesIndexRoute: typeof RecipesIndexRoute
+  MenusMenuIdEditRoute: typeof MenusMenuIdEditRoute
   RecipesRecipeIdEditRoute: typeof RecipesRecipeIdEditRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  MenusMenuIdRoute: MenusMenuIdRoute,
+  MenusNewRoute: MenusNewRoute,
   RecipesRecipeIdRoute: RecipesRecipeIdRoute,
   RecipesNewRoute: RecipesNewRoute,
+  MenusIndexRoute: MenusIndexRoute,
   RecipesIndexRoute: RecipesIndexRoute,
+  MenusMenuIdEditRoute: MenusMenuIdEditRoute,
   RecipesRecipeIdEditRoute: RecipesRecipeIdEditRoute,
 }
 
@@ -193,9 +281,13 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/menus/$menuId",
+        "/menus/new",
         "/recipes/$recipeId",
         "/recipes/new",
+        "/menus/",
         "/recipes/",
+        "/menus_/$menuId/edit",
         "/recipes_/$recipeId/edit"
       ]
     },
@@ -205,14 +297,26 @@ export const routeTree = rootRoute
     "/about": {
       "filePath": "about.tsx"
     },
+    "/menus/$menuId": {
+      "filePath": "menus/$menuId.tsx"
+    },
+    "/menus/new": {
+      "filePath": "menus/new.tsx"
+    },
     "/recipes/$recipeId": {
       "filePath": "recipes/$recipeId.tsx"
     },
     "/recipes/new": {
       "filePath": "recipes/new.tsx"
     },
+    "/menus/": {
+      "filePath": "menus/index.tsx"
+    },
     "/recipes/": {
       "filePath": "recipes/index.tsx"
+    },
+    "/menus_/$menuId/edit": {
+      "filePath": "menus_.$menuId.edit.tsx"
     },
     "/recipes_/$recipeId/edit": {
       "filePath": "recipes_.$recipeId.edit.tsx"

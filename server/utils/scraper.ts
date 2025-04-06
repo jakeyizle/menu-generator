@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 import { JSDOM } from 'jsdom';
-import { Recipe, Ingredient, MealType } from '../../src/types/recipe.js';
+import { Recipe, Ingredient, MealType } from '../../src/types/types.js';
 
 /**
  * Cleans up text by decoding entities and removing HTML tags
@@ -130,12 +130,24 @@ function mapJsonLdToRecipe(jsonLd: any): Recipe {
   // Determine meal types based on keywords in recipe name and description
   const mealTypes = determineMealTypes(jsonLd.name, jsonLd.description);
   
+  // Extract servings information
+  let servings = 0;
+  if (jsonLd.recipeYield) {
+    // Try to extract a number from recipeYield
+    const servingsMatch = String(jsonLd.recipeYield).match(/\d+/);
+    if (servingsMatch) {
+      servings = parseInt(servingsMatch[0], 10);
+    }
+  }
+  
   return {
     id: '',
     name: cleanupText(jsonLd.name) || 'Untitled Recipe',
     description: cleanupText(jsonLd.description) || '',
     ingredients,
-    mealTypes: new Set(mealTypes)
+    mealTypes: new Set(mealTypes),
+    servings,
+    url: '',
   };
 }
 
@@ -160,6 +172,19 @@ function extractMicrodataRecipe(html: string): Recipe | null {
     // Extract description
     const descriptionMatch = recipeBlock.match(/<[^>]+itemprop=["']description["'][^>]*>([\s\S]*?)<\/[^>]+>/i) ||
                              recipeBlock.match(/<[^>]+itemprop=["']description["'][^>]*content=["']([^"']+)["']/i);
+    
+    // Extract servings
+    const servingsMatch = recipeBlock.match(/<[^>]+itemprop=["']recipeYield["'][^>]*>([\s\S]*?)<\/[^>]+>/i) ||
+                          recipeBlock.match(/<[^>]+itemprop=["']recipeYield["'][^>]*content=["']([^"']+)["']/i);
+    
+    let servings = 0;
+    if (servingsMatch && servingsMatch[1]) {
+      const servingsStr = cleanupText(servingsMatch[1]);
+      const servingsNumMatch = servingsStr.match(/\d+/);
+      if (servingsNumMatch) {
+        servings = parseInt(servingsNumMatch[0], 10);
+      }
+    }
     
     // Extract ingredients
     const ingredientMatches = [...recipeBlock.matchAll(/<[^>]+itemprop=["']recipeIngredient["'][^>]*>([\s\S]*?)<\/[^>]+>/gi)];
@@ -187,7 +212,9 @@ function extractMicrodataRecipe(html: string): Recipe | null {
       name,
       description,
       ingredients,
-      mealTypes: new Set(mealTypes)
+      mealTypes: new Set(mealTypes),
+      servings,
+      url: '',
     };
   } catch (error) {
     console.warn('Error extracting microdata recipe:', error);

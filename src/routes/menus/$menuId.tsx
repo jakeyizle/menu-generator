@@ -1,19 +1,19 @@
 import { useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, ErrorComponentProps, useRouter, ErrorComponent } from '@tanstack/react-router'
-import { recipeQueryOptions } from '@/recipeQueryOptions'
-import { RecipeNotFoundError } from '@/lib/db/recipes'
 import React from 'react'
-import RecipeView from '@/components/recipes/RecipeView'
+import { menuQueryOptions } from '@/menuQueryOptions'
+import { MenuNotFoundError } from '@/lib/db/menus'
+import MenuView from '@/components/menus/MenuView'
 
-export const Route = createFileRoute('/recipes/$recipeId')({
-  loader: ({ context: { queryClient }, params: { recipeId } }) => queryClient.ensureQueryData(recipeQueryOptions(recipeId)),
-  errorComponent: RecipeErrorComponent,
+export const Route = createFileRoute('/menus/$menuId')({
+  loader: ({ context: { queryClient }, params: { menuId } }) => queryClient.ensureQueryData(menuQueryOptions(menuId)),
+  errorComponent: MenuErrorComponent,
   component: RouteComponent,
 })
 
-function RecipeErrorComponent({ error }: ErrorComponentProps) {
+function MenuErrorComponent({ error }: ErrorComponentProps) {
   const router = useRouter()
-  if (error instanceof RecipeNotFoundError) {
+  if (error instanceof MenuNotFoundError) {
     return <div>{error.message}</div>
   }
   const queryErrorResetBoundary = useQueryErrorResetBoundary()
@@ -31,10 +31,10 @@ function RecipeErrorComponent({ error }: ErrorComponentProps) {
 }
 
 function RouteComponent() {
-  const recipeId = Route.useParams().recipeId
-  const { data: recipe } = useSuspenseQuery(recipeQueryOptions(recipeId))
+  const menuId = Route.useParams().menuId
+  const { data: menu } = useSuspenseQuery(menuQueryOptions(menuId))
 
   return (
-    <RecipeView recipe={recipe} />
+    <MenuView menu={menu} />
   )
 }

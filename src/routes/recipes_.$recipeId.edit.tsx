@@ -1,4 +1,4 @@
-import { RecipeForm } from '@/components/RecipeForm'
+import { RecipeForm } from '@/components/recipes/RecipeForm'
 import { useQueryErrorResetBoundary, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, ErrorComponentProps, useRouter, ErrorComponent } from '@tanstack/react-router'
 import { recipeQueryOptions } from '@/recipeQueryOptions'

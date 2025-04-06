@@ -1,4 +1,4 @@
-import { Recipe } from "@/types/recipe";
+import { Recipe } from "@/types/types";
 
 /**
  * Calls the server-side API to scrape a recipe from a URL
@@ -23,9 +23,11 @@ export const scrapeRecipe = async (url: string): Promise<Recipe> => {
     }
     
     const recipe = (await response.json()) as Recipe;
-    console.log(recipe)
     recipe.mealTypes = new Set(recipe.mealTypes);
-    console.log(recipe)
+    
+    // Ensure servings is set to a default value if not provided
+    recipe.servings ||= 0;
+    recipe.url = url;
     return recipe;
   } catch (error) {
     console.error("Error scraping recipe:", error);

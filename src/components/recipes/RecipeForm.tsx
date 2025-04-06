@@ -9,12 +9,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
-import type { Recipe, Ingredient, MealType } from "@/types/recipe"
+import type { Recipe, Ingredient, MealType } from "@/types/types"
 import { Link } from "@tanstack/react-router"
 import { createRecipe, updateRecipe } from "@/lib/db/recipes"
 import { useNavigate } from "@tanstack/react-router"
 import { RecipeImporter } from "./RecipeImporter"
-import { Separator } from "./ui/separator"
+import { Separator } from "../ui/separator"
 
 interface RecipeFormProps {
     initialData?: Recipe
@@ -28,9 +28,11 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
         initialData || {
             id: '',
             name: "",
+            url: "",
             description: "",
             ingredients: [],
             mealTypes: new Set(),
+            servings: 4,
         },
     )
 
@@ -92,6 +94,14 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
                         required
                     />
                 </div>
+                <div className="space-y-2">
+                    <Label htmlFor="url">URL</Label>
+                    <Input
+                        id="url"
+                        value={formData.url}
+                        onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                        placeholder="Enter recipe URL" />
+                    </div>
 
                 <div className="space-y-2">
                     <Label htmlFor="description">Description</Label>
@@ -101,6 +111,18 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         placeholder="Describe your recipe"
                         rows={3}
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="servings">Number of Servings</Label>
+                    <Input
+                        id="servings"
+                        type="number"
+                        min="1"
+                        value={formData.servings}
+                        onChange={(e) => setFormData({ ...formData, servings: Number(e.target.value) })}                        
+                        required
                     />
                 </div>
 
@@ -217,4 +239,3 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
         </form>
     )
 }
-

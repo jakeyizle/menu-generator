@@ -7,8 +7,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { MealType, Recipe } from "@/types/recipe"
-import { DeleteRecipeDialog } from "@/components/DeleteRecipeDialog"
+import { Recipe, MealType } from "@/types/types"
+import { DeleteDialog } from "../DeleteDialog"
 import { deleteRecipe } from "@/lib/db/recipes"
 
 interface RecipeListProps {
@@ -23,7 +23,7 @@ export function RecipeList({ recipes }: RecipeListProps) {
 
     const handleDelete = () => {
         if (recipeToDelete) {
-            deleteRecipe(recipeToDelete)            
+            deleteRecipe(recipeToDelete)
         }
     }
 
@@ -95,7 +95,10 @@ export function RecipeList({ recipes }: RecipeListProps) {
                                             </Badge>
                                         ))}
                                     </div>
-                                    <p className="text-sm text-muted-foreground">{recipe.ingredients.length} ingredients</p>
+                                    <div className="flex justify-between">
+                                        <p className="text-sm text-muted-foreground">{recipe.ingredients.length} ingredients</p>
+                                        <p className="text-sm text-muted-foreground">{`${recipe.servings ?? 0} ${recipe.servings === 1 ? "serving" : "servings"}`}</p>
+                                    </div>
                                 </div>
                             </CardContent>
                             <CardFooter className="flex-none justify-between border-t pt-4">
@@ -128,11 +131,11 @@ export function RecipeList({ recipes }: RecipeListProps) {
                 </div>
             )}
 
-            <DeleteRecipeDialog
-        isOpen={!!recipeToDelete}        
-        onClose={() => setRecipeToDelete(null)}
-        onDelete={handleDelete}
-      />
+            <DeleteDialog
+                isOpen={!!recipeToDelete}
+                onClose={() => setRecipeToDelete(null)}
+                onDelete={handleDelete}
+            />
         </div>
     )
 }

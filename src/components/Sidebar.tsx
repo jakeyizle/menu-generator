@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/sidebar"
 
 export function MainSidebar() {
-
     return (
         <Sidebar>
             <SidebarHeader>
@@ -62,6 +61,19 @@ export function MainSidebar() {
                                            >
                                     <PlusCircle className="mr-2 h-4 w-4" />
                                     <span>Manage Recipes</span>
+                                </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+
+                        <SidebarMenuItem>
+                            <SidebarMenuButton asChild>
+                                <Link to="/menus"
+                                    activeProps={{
+                                        className: 'font-bold',
+                                    }}  
+                                    >
+                                    <UtensilsCrossed className="mr-2 h-4 w-4" />
+                                    <span>Manage Menus</span>
                                 </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
